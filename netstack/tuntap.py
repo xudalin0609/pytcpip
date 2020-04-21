@@ -50,17 +50,19 @@ def new_tap(name):
 
 # make the netwrok card start
 def set_link_up(name):
-    out = exec("ip link set {} up".format(name))
+
+    out = os.system("ip link set {} up".format(name))
     return out
 
 # add ip route
 def set_route(name, cidr):
-    out = exec("ip route add {} dev {}".format(cidr, name))
+    out = os.system("ip route add {} dev {}".format(cidr, name))
     return out
 
 # add ip address
 def add_ip(name, ip):
-    out = exec("ip addr add {} dev {}".format(ip, name))
+    out = os.system("ip addr add {} dev {}".format(ip, name))
+    return out
 
 def get_hardware_addr():
     node = uuid.getnode()
