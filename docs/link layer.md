@@ -8,3 +8,19 @@ TAP/TUN 设备是一种让用户态和内核之间进行数据交换的虚拟设
 |       kernel         |
 +----------------------+
 ```
+
+#### 测试1
+```
+python .\lab\link\tap1.py
+```
+启动了一个tap网卡，并持续的从tap读取数据
+
+```
+sudo tcpdump -i tap0 -n
+```
+利用tcpdump抓取经过tap0网卡的数据
+
+```
+ping 192.168.1.2
+```
+可以看到,ping封装了一个icmp报文,到链路层后由于找不到192.168.1.2对应的MAC地址,tap0发送了ARP请求,tcpdump抓取到在tap0网卡的ARP请求.
