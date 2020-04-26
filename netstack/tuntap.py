@@ -5,6 +5,7 @@ import fcntl
 import struct
 import uuid
 import termios
+import socket
 
 
 TUNSETIFF =  0x400454ca
@@ -15,6 +16,9 @@ IFF_NO_PI = 0x1000
 
 TUN = 1
 TAP = 2
+
+IPV4_PROTOCOL_NUMBER = 0x0800
+IPV6_PROTOCOL_NUMBER = 0x86dd
 
 # virtual network car config
 class Config:
@@ -55,8 +59,8 @@ def set_link_up(name):
     return out
 
 # add ip route
-def set_route(name, cidr):
-    out = os.system("ip route add {} dev {}".format(cidr, name))
+def set_route(name, ip):
+    out = os.system("ip route add {} dev {}".format(ip, name).replace("'", ""))
     return out
 
 # add ip address
@@ -64,11 +68,10 @@ def add_ip(name, ip):
     out = os.system("ip addr add {} dev {}".format(ip, name))
     return out
 
-def get_hardware_addr():
-    node = uuid.getnode()
-    mac = uuid.UUID(int = node).hex[-12:]
-    return mac
-
+def get_hardware_addr(name):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    info = fcntl.ioctl(s.fileno(), 0x8927,  struct.pack('256s', bytes(name, 'utf-8')[:15]))
+    return ':'.join('%02x' % b for b in info[18:24])
 
 if __name__ == '__main__':
     new_tap('tap0')
