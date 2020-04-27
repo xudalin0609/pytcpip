@@ -3,6 +3,7 @@ from netstack.tcpip.header.eth import ETHERNET_MINI_MUM_SIZE
 BUF_CONFIG = [128, 256, 256, 512, 1024, 2048, 4096, 8192, 16384, 32768]
 
 next_link_endpoint_id = 1
+link_end_points = {}
 
 
 class Mutex:
@@ -66,7 +67,9 @@ def register_link_endpoint(link_end_point):
     global next_link_endpoint_id
     v = next_link_endpoint_id
     next_link_endpoint_id += 1
-    link_end_point[v] = li
+    # 从协议存储结构中获取link_end_point
+    link_end_points[v] = link_end_point
+    return v
 
 
 

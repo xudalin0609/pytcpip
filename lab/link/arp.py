@@ -35,7 +35,9 @@ def main():
     opts = Options(fd=fd, mtu=1500, address=mac)
 
     # 网卡文件接口
-    new_link_endpoint(opts)
+    link_id = new_link_endpoint(opts)
+
+    s = 
 
 
 
